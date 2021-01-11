@@ -29,17 +29,30 @@ app.post('/fortunes', (req, res) => {
 
   const fortune_ids = fortunes.map(f => f.id);
 
-  const fortune = { 
-    id: (fortune_ids.length > 0 ? Math.max(...fortune_ids) : 0) + 1,
+    const new_fortunes = fortunes.concat(
+      {id: (fortune_ids.length > 0 ? Math.max(...fortune_ids) : 0) + 1,
     message, 
     lucky_number, 
-    spirit_animal};
-
-    const new_fortunes = fortunes.concat(fortune);
+    spirit_animal});
 
     fs.writeFile('./data/fortunes.json', JSON.stringify(new_fortunes), err => console.log(err))
     
     res.json(new_fortunes)
+});
+
+app.put('/fortunes/:id', (req, res) => {
+  const { id } = req.params;
+  const { message, lucky_number, spirit_animal} = req.body;
+
+  const old_fortune = fortunes.find(f => f.id == id);
+
+  if(message) old_fortune.message = message;
+  if(message) old_fortune.lucky_number = lucky_number;
+  if(message) old_fortune.spirit_animal = spirit_animal;
+
+  fs.writeFile('./data/fortunes.json', JSON.stringify(fortunes), err => console.log(err));
+
+  res.json(fortunes);
 })
 
 
