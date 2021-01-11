@@ -53,6 +53,16 @@ app.put('/fortunes/:id', (req, res) => {
   fs.writeFile('./data/fortunes.json', JSON.stringify(fortunes), err => console.log(err));
 
   res.json(fortunes);
+});
+
+app.delete('/fortunes/:id', (req,res) => {
+  const { id } = req.params;
+
+  const new_fortunes = fortunes.filter(f=> f.id != id)
+
+  fs.writeFile('./data/fortunes.json', JSON.stringify(new_fortunes), err => console.log(err))
+
+  res.json(new_fortunes)
 })
 
 
